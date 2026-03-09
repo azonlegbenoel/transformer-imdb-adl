@@ -132,11 +132,10 @@ def lancer(avec_dropout, nb_epoques, device, train_loader, test_loader, taille_v
     print(f"  Paramètres entraînables : {nb_params:,}")
 
     critere  = nn.BCEWithLogitsLoss()
-    optimis  = optim.AdamW(modele.parameters(), lr=3e-4, weight_decay=1e-2)
-    # Warmup linéaire sur 10% des steps puis cosine decay
-    scheduler = optim.lr_scheduler.OneCycleLR(
-        optimis, max_lr=3e-4,
-        steps_per_epoch=len(train_loader), epochs=nb_epoques
+    optimis  = optim.AdamW(modele.parameters(), lr=1e-3, weight_decay=1e-2)
+    # Réduit le LR quand l'accuracy stagne — plus stable que OneCycleLR
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+        optimis, mode='max', factor=0.5, patience=3, verbose=True
     )
 
     historique = {"train_loss": [], "train_acc": [], "test_loss": [], "test_acc": []}
@@ -145,8 +144,8 @@ def lancer(avec_dropout, nb_epoques, device, train_loader, test_loader, taille_v
 
     for ep in range(1, nb_epoques + 1):
         p_tr, a_tr = entrainer_epoque(modele, train_loader, critere, optimis, device)
-        scheduler.step()
         p_te, a_te = evaluer(modele, test_loader, critere, device)
+        scheduler.step(a_te)  # réduit le LR si test_acc stagne
 
         historique["train_loss"].append(round(p_tr, 4))
         historique["train_acc"].append(round(a_tr, 2))
