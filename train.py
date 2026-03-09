@@ -135,7 +135,7 @@ def lancer(avec_dropout, nb_epoques, device, train_loader, test_loader, taille_v
     optimis  = optim.AdamW(modele.parameters(), lr=1e-3, weight_decay=1e-2)
     # Réduit le LR quand l'accuracy stagne — plus stable que OneCycleLR
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-        optimis, mode='max', factor=0.5, patience=3, verbose=True
+        optimis, mode='max', factor=0.5, patience=3
     )
 
     historique = {"train_loss": [], "train_acc": [], "test_loss": [], "test_acc": []}

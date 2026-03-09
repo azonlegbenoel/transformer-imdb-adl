@@ -1,3 +1,4 @@
 {
-  "avec_dropout": 87.044
+  "avec_dropout": 86.572,
+  "sans_dropout": 84.024
 }
