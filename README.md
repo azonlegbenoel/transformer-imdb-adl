@@ -28,8 +28,7 @@ transformer-imdb-adl/
 ├── meilleur_sans_dropout.pth     # Checkpoint ablation sans dropout
 ├── historique_avec_dropout.json  # Courbes d'entraînement
 ├── historique_sans_dropout.json
-├── resultats_ablation.json       # Résultats comparatifs
-└── data/aclImdb/                 # Dataset IMDB
+└── resultats_ablation.json       # Résultats comparatifs
 ```
 
 ---
